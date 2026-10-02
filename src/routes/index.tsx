@@ -36,7 +36,7 @@ export const Route = createFileRoute("/")({
 type StatusFilter = "todos" | "pendente" | "vencido" | "pago";
 
 function shiftMonth(key: string, delta: number) {
-  const [y, m] = key.split("-").map(Number);
+  const [y = 0, m = 1] = key.split("-").map(Number);
   return monthKey(new Date(y, m - 1 + delta, 1));
 }
 
@@ -101,9 +101,9 @@ function Index() {
     setTab(entry.type);
   };
 
-  const [y, m] = month.split("-").map(Number);
+  const [y = 0, m = 1] = month.split("-").map(Number);
   const lastDay = new Date(y, m, 0).getDate();
-  const monthName = monthLabel(month).split(" ")[0].toLowerCase();
+  const monthName = (monthLabel(month).split(" ")[0] ?? "").toLowerCase();
 
   return (
     <div className="min-h-screen bg-paper font-display text-[15px] text-ink">
@@ -194,7 +194,7 @@ function Index() {
           {overdueRows.length > 0 && (
             <p className="mt-3 font-mono text-[11px] uppercase tracking-wider text-ink/60">
               + {overdueRows.length} {overdueRows.length === 1 ? "conta vencida" : "contas vencidas"} de meses anteriores ·{" "}
-              <button className="underline" onClick={() => setMonth(overdueRows[0].dueDate.slice(0, 7))}>ver</button>
+              <button className="underline" onClick={() => overdueRows[0] && setMonth(overdueRows[0].dueDate.slice(0, 7))}>ver</button>
             </p>
           )}
         </section>
